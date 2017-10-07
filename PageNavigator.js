@@ -23,12 +23,13 @@
 })(this, function () {
 
     /**
-    * [PageNavigator description]
-    * @param       {[type]} items      [description]
-    * @param       {[type]} numberPerPage [description]
-    * @constructor
-    */
-    function PageNavigator (items, numberPerPage) {
+     * Конструтор постраничной навигации на стороне клиента
+     * @param       {Array} items
+     * @param       {Number} numberPerPag
+     * @param       {String} linkTpl должен содержать #page# и #content# метки
+     * @constructor
+     */
+    function PageNavigator (items, numberPerPage, linkTpl) {
 
         /**
         * Количество страниц
@@ -47,6 +48,10 @@
         * @type {Object}
         */
         var itemsByPages = {};
+
+        if (typeof linkTpl !== 'String' || linkTpl === '') {
+            linkTpl = '<a data-page="#page#" href="#">#content#</a>';
+        }
 
         /**
         * Распределение элементов по страницам
@@ -73,6 +78,34 @@
 
                 });
             }
+        }
+
+        /**
+         * Формирует и возвращает ссылку для постраничной навигации
+         * @param       {String} page
+         * @param       {String} content
+         * @return      {String}
+         */
+        function _getLink (page, content) {
+
+            var link = linkTpl;
+
+            var regexppm = /\#page\#/;
+
+            var regexpcm = /\#content\#/;
+
+            page = page || '';
+            content = content || '';
+
+            while (regexppm.test(link)) {
+                link = link.replace('#page#', page);
+            }
+
+            while (regexpcm.test(link)) {
+                link = link.replace('#content#', content);
+            }
+
+            return link;
         }
 
         /**
@@ -114,15 +147,11 @@
 
                 if (page > 2) {
 
-                    html += '<a data-page="'+(page-1)+'" href="#" aria-label="Previous">';
-                    html += '<span aria-hidden="true">&laquo;</span>';
-                    html += '</a>';
+                    html += _getLink(page-1, '<span>&laquo;</span>');
 
                 } else {
 
-                    html += '<a data-page="'+page+'" href="#" aria-label="Previous">';
-                    html += '<span aria-hidden="true">&laquo;</span>';
-                    html += '</a>';
+                    html += _getLink(page, '<span>&laquo;</span>');
 
                 }
 
@@ -130,10 +159,10 @@
 
                 if (nStartPage > 1) {
 
-                    html += '<li><a data-page="1" href="#">1</a></li>';
+                    html += '<li>'+_getLink(1, 1)+'</li>';
 
                     if (nStartPage > 2) {
-                        html += '<li><a data-page="'+(nStartPage + 1)+'" href="#">...</a></li>';
+                        html += '<li>'+_getLink(nStartPage + 1, '...')+'</li>';
                     }
                 }
 
@@ -141,7 +170,7 @@
 
             do {
 
-                html += '<li '+(nStartPage == page ? 'class="active"' : '')+' ><a data-page="'+nStartPage+'" href="#">"'+nStartPage+'"</a></li>';
+                html += '<li '+(nStartPage == page ? 'class="active"' : '')+' >'+_getLink(nStartPage, nStartPage)+'</li>';
                 nStartPage++;
 
             } while(nStartPage <= nEndPage);
@@ -149,11 +178,11 @@
             if (page < nEndPage) {
                 if (nEndPage < pageCount) {
                     if (nEndPage < pageCount - 1) {
-                        html += '<li><a data-page="'+Math.round(nEndPage + (pageCount - nEndPage)/2)+'" href="#">...</a></li>';
+                        html += '<li>'+_getLink(Math.round(nEndPage + (pageCount - nEndPage)/2), '...')+'</li>';
                     }
-                    html += '<li><a data-page="'+pageCount+'" href="#">'+pageCount+'</a></li>';
+                    html += '<li>'+_getLink(pageCount, pageCount)+'</li>';
                 }
-                html += '<li><a data-page="'+(page + 1)+'" href="#"><span aria-hidden="true">&raquo;</span></a></li>';
+                html += '<li>' + _getLink(page + 1, '<span>&raquo;</span>') + '</li>';
             }
 
             html += '</ul>';

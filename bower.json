@@ -1,0 +1,25 @@
+{
+  "name": "PageNavigator",
+  "main": "PageNavigator.js",
+  "authors": [
+    "dimabresky <dimabresky@gmail.com>"
+  ],
+  "description": "PageNavigator for build page navigation in client side",
+  "keywords": [
+    "page navigation",
+    "javascript",
+    "navigation"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "qunit": "^2.4.0"
+  }
+}
