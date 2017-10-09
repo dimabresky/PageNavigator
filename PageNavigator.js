@@ -35,7 +35,7 @@
         * Количество страниц
         * @type {Number}
         */
-        var pageCount = Math.ceil(items.length/numberPerPage);
+        var pageCount = Math.ceil(items.length/numberPerPage) || 1;
 
         /**
         * Количество столбцов в пагинации
@@ -49,7 +49,8 @@
         */
         var itemsByPages = {};
 
-        if (typeof linkTpl !== 'String' || linkTpl === '') {
+        if (typeof linkTpl !== 'string' || linkTpl === '') {
+
             linkTpl = '<a data-page="#page#" href="#">#content#</a>';
         }
 
