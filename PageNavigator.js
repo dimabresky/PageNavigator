@@ -236,7 +236,7 @@
 
         /**
          * Количество страниц постраничной навигации
-         * @return {[type]} [description]
+         * @return {undefined}
          */
         this.pageCount = function () {
             return pageCount;
